@@ -1,10 +1,35 @@
 <script setup>
 import IPInfo from '@/components/IPInfo.vue';
+import { ref } from 'vue';
+import axios from 'axios'
+
+const queryIp = ref('')
+const ipInfo = ref(null)
+
+const getIpInfo = async () => {
+  try {
+    const data = await axios.get(`
+https://geo.ipify.org/api/v2/country,city?apiKey=at_IXfdBSI6WxkO2qwfBQbKK7t6BvC9Z&ipAddress=${queryIp.value}`)
+    const result = data.data
+    ipInfo.value = {
+      ip: result.ip,
+      state: result.location.region,
+      city: result.location.city,
+      timezone: result.location.timezone,
+      isp: result.isp,
+      lat: result.location.lat,
+      lng: result.location.lng,
+    }
+
+  } catch (err) {
+    alert(err.message)
+  }
+}
 
 </script>
 
 <template>
-  <div class="flex flex-col h-screen max-h-screen">
+  <div class="flex flex-col h-screen max-h-screen bg-sky-600">
     <!-- Search / Results -->
     <div class="z-20 flex justify-center relative px-4 pt-8 pb-32">
       <!-- Search Input -->
@@ -24,7 +49,7 @@ import IPInfo from '@/components/IPInfo.vue';
         </div>
       </div>
       <!-- IP Info -->
-      <!-- <IPInfo v-if="ipInfo" v-bind:ipInfo="ipInfo" /> -->
+      <IPInfo v-if="ipInfo" v-bind:ipInfo="ipInfo" />
     </div>
 
     <!-- Map -->

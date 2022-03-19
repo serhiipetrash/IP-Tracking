@@ -5,12 +5,17 @@
     <!-- Flex Item #1  -->
     <div class="flex flex-col">
       <h3 class="text-xs mb-2 uppercase">IP Address</h3>
-      <span class="text-2xl">{{ ipInfo.address }}</span>
+      <span class="text-2xl">{{ ipInfo.ip }}</span>
     </div>
     <!-- Flex Item #2  -->
     <div class="flex flex-col">
       <h3 class="text-xs mb-2 uppercase">Location</h3>
       <span class="text-2xl">{{ ipInfo.state }}</span>
+    </div>
+    <!-- Flex Item #2 city -->
+    <div class="flex flex-col">
+      <h3 class="text-xs mb-2 uppercase">City</h3>
+      <span class="text-2xl">{{ ipInfo.city }}</span>
     </div>
     <!-- Flex Item #3  -->
     <div class="flex flex-col">
