@@ -1,10 +1,12 @@
 <script setup>
 import IPInfo from '@/components/IPInfo.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios'
+import leaflet from 'leaflet';
 
 const queryIp = ref('')
 const ipInfo = ref(null)
+let mymap;
 
 const getIpInfo = async () => {
   try {
@@ -21,10 +23,34 @@ https://geo.ipify.org/api/v2/country,city?apiKey=at_IXfdBSI6WxkO2qwfBQbKK7t6BvC9
       lng: result.location.lng,
     }
 
+    leaflet.marker([ipInfo.value.lat, ipInfo.value.lng]).addTo(mymap);
+    mymap.setView([ipInfo.value.lat, ipInfo.value.lng], 10);
+
   } catch (err) {
     alert(err.message)
   }
 }
+
+
+// mounted lifecycle hook, creates the map
+onMounted(() => {
+  mymap = leaflet.map("mapid").setView([49.1414, 28.2802], 6);
+  leaflet
+    .tileLayer(
+      "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic2VyaGlpcGV0cmFzaCIsImEiOiJjbDB5NHRlYWUxYm04M2NrYm93Z2Z5dDZiIn0.8cGHiYCD3_9-5L4GNB3MAw",
+      {
+        attribution:
+          'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: "mapbox/streets-v11",
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken:
+          "pk.eyJ1Ijoic2VyaGlpcGV0cmFzaCIsImEiOiJjbDB5NHRlYWUxYm04M2NrYm93Z2Z5dDZiIn0.8cGHiYCD3_9-5L4GNB3MAw",
+      }
+    )
+    .addTo(mymap);
+});
 
 </script>
 
@@ -53,6 +79,6 @@ https://geo.ipify.org/api/v2/country,city?apiKey=at_IXfdBSI6WxkO2qwfBQbKK7t6BvC9
     </div>
 
     <!-- Map -->
-    <!-- <div id="mapid" class="h-full z-10"></div> -->
+    <div id="mapid" class="h-full z-10"></div>
   </div>
 </template>
